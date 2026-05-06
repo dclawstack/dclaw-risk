@@ -1,0 +1,26 @@
+replicaCount: 1
+
+frontend:
+  image:
+    repository: dclaw-risk-frontend
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 3050
+  ingress:
+    enabled: false
+
+backend:
+  image:
+    repository: dclaw-risk-backend
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 8136
+  env:
+    RISK_DATABASE_URL: "postgresql+asyncpg://postgres:postgres@postgres:5432/dclaw_risk"
+
+database:
+  name: dclaw_risk

@@ -1,0 +1,4 @@
+DClaw Risk deployed!
+
+Frontend: http://dclaw-risk.local
+Backend API: http://dclaw-risk-backend:8136
