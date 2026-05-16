@@ -1,5 +1,8 @@
 # DClaw Risk — v1.2 Feature Roadmap
 
+> 📘 **REVISED PRD v2.3 available:** See `REVISED-PRD.md` for complete gap analysis, current state, and full feature roadmap.
+
+
 > Based on: Y Combinator vertical SaaS principles, trending GitHub repos (openfair, riskquant), AI product research (RiskLens, LogicGate, MetricStream, ServiceNow GRC)
 
 ## Pre-Flight Checklist
