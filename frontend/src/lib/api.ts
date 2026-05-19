@@ -557,4 +557,83 @@ export const api = {
     deleteSurvey: (id: string) =>
       fetchJson<void>(`/api/v1/culture/surveys/${id}`, { method: "DELETE" }),
   },
+
+  documents: {
+    list: () =>
+      fetchJson<{
+        items: Array<{
+          id: string;
+          title: string;
+          source: string | null;
+          excerpt: string;
+          created_at: string;
+        }>;
+        total: number;
+      }>("/api/v1/documents"),
+    create: (payload: { title: string; content: string; source?: string }) =>
+      fetchJson("/api/v1/documents", {
+        method: "POST",
+        body: JSON.stringify(payload),
+      }),
+    delete: (id: string) =>
+      fetchJson<void>(`/api/v1/documents/${id}`, { method: "DELETE" }),
+    search: (q: string, k = 5) =>
+      fetchJson<{
+        query: string;
+        hits: Array<{
+          document_id: string;
+          title: string;
+          score: number;
+          snippet: string;
+        }>;
+      }>(`/api/v1/documents/search?q=${encodeURIComponent(q)}&k=${k}`),
+  },
+
+  compliance: {
+    library: () =>
+      fetchJson<{
+        mock: boolean;
+        source: string;
+        frameworks: Array<{
+          id: string;
+          name: string;
+          category: string;
+          requirements: Array<{
+            id: string;
+            title: string;
+            expects_control_types: string[];
+          }>;
+        }>;
+      }>("/api/v1/compliance/library"),
+    unifiedView: () =>
+      fetchJson<{
+        mock: boolean;
+        source: string;
+        totals: {
+          requirements: number;
+          covered: number;
+          uncovered: number;
+          coverage_pct: number;
+        };
+        rows: Array<{
+          framework_id: string;
+          framework: string;
+          requirement_id: string;
+          requirement: string;
+          expects: string[];
+          matching_controls: Array<{
+            id: string;
+            name: string;
+            type: string;
+            effectiveness: number;
+          }>;
+          covered: boolean;
+        }>;
+      }>("/api/v1/compliance/unified-view"),
+    sync: () =>
+      fetchJson<{ mock: boolean; source: string; received?: number }>(
+        "/api/v1/compliance/sync",
+        { method: "POST" }
+      ),
+  },
 };

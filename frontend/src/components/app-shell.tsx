@@ -12,8 +12,10 @@ import {
   AlertTriangle,
   Layers,
   Building2,
+  BookOpen,
   Radio,
   Users,
+  ScrollText,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -28,6 +30,8 @@ const NAV = [
   { href: "/vendors", label: "Vendors", icon: Building2 },
   { href: "/emerging", label: "Emerging", icon: Radio },
   { href: "/culture", label: "Culture", icon: Users },
+  { href: "/compliance", label: "Compliance", icon: ScrollText },
+  { href: "/knowledge", label: "Knowledge", icon: BookOpen },
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -64,7 +68,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           })}
         </nav>
         <div className="px-5 py-4 border-t border-slate-200 text-xs text-slate-400">
-          v1.0 · P0-P2
+          v1.0 · full
         </div>
       </aside>
       <main className="flex-1 min-w-0 p-6">{children}</main>

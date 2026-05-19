@@ -24,6 +24,10 @@ class Settings(BaseSettings):
     logto_audience: str = ""
     dev_auth_bypass: bool = True
 
+    # DClaw Compliance integration (P1.4). Empty URL → mock-mode fixture.
+    compliance_base_url: str = ""
+    compliance_mock_mode: bool = True
+
     # LLM providers
     ollama_url: str = "http://localhost:11434"
     ollama_model: str = "llama3.1"

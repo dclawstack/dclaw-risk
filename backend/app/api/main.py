@@ -9,8 +9,10 @@ from app.api.v1 import (
     assessments,
     controls,
     culture,
+    documents,
     emerging,
     incidents,
+    integrations,
     kris,
     reports,
     risks,
@@ -58,6 +60,9 @@ app.include_router(
     tags=["assessments"],
 )
 app.include_router(ai.router, prefix="/api/v1/ai", tags=["ai"])
+app.include_router(
+    documents.router, prefix="/api/v1/documents", tags=["knowledge-base"]
+)
 
 # P1
 app.include_router(reports.router, prefix="/api/v1/reports", tags=["reports"])
@@ -65,6 +70,7 @@ app.include_router(kris.router, prefix="/api/v1/kris", tags=["kris"])
 app.include_router(
     incidents.router, prefix="/api/v1/incidents", tags=["incidents"]
 )
+app.include_router(integrations.router, prefix="/api/v1", tags=["integrations"])
 
 # P2
 app.include_router(
