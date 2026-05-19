@@ -7,7 +7,7 @@ frontend:
     pullPolicy: IfNotPresent
   service:
     type: ClusterIP
-    port: 3050
+    port: 3092
   ingress:
     enabled: false
 
@@ -18,7 +18,7 @@ backend:
     pullPolicy: IfNotPresent
   service:
     type: ClusterIP
-    port: 8136
+    port: 18162
   env:
     RISK_DATABASE_URL: "postgresql+asyncpg://postgres:postgres@postgres:5432/dclaw_risk"
 
