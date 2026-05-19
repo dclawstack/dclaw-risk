@@ -26,7 +26,7 @@ class IdentifyRisksRequest(BaseModel):
         min_length=1,
         description="Free-text project / system context to mine for risks",
     )
-    count: int = Field(default=5, ge=1, le=20)
+    count: int = Field(default=5, ge=1, le=50)
 
 
 class IdentifiedRisk(BaseModel):

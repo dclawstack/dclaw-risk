@@ -1,3 +1,3 @@
-from app.services import fair_calculator, llm, risk_ai
+from app.services import emerging, fair_calculator, llm, reports, risk_ai
 
-__all__ = ["fair_calculator", "llm", "risk_ai"]
+__all__ = ["emerging", "fair_calculator", "llm", "reports", "risk_ai"]

@@ -2,13 +2,32 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ShieldAlert, ListChecks, Activity, ShieldCheck } from "lucide-react";
+import {
+  ShieldAlert,
+  ListChecks,
+  Activity,
+  ShieldCheck,
+  BarChart3,
+  Gauge,
+  AlertTriangle,
+  Layers,
+  Building2,
+  Radio,
+  Users,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV = [
   { href: "/", label: "Dashboard", icon: Activity },
   { href: "/risks", label: "Risk register", icon: ListChecks },
   { href: "/controls", label: "Controls", icon: ShieldCheck },
+  { href: "/reports", label: "Reports", icon: BarChart3 },
+  { href: "/kris", label: "KRIs", icon: Gauge },
+  { href: "/incidents", label: "Incidents", icon: AlertTriangle },
+  { href: "/scenarios", label: "Scenarios", icon: Layers },
+  { href: "/vendors", label: "Vendors", icon: Building2 },
+  { href: "/emerging", label: "Emerging", icon: Radio },
+  { href: "/culture", label: "Culture", icon: Users },
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -45,7 +64,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           })}
         </nav>
         <div className="px-5 py-4 border-t border-slate-200 text-xs text-slate-400">
-          v1.0 · P0 demo
+          v1.0 · P0-P2
         </div>
       </aside>
       <main className="flex-1 min-w-0 p-6">{children}</main>
