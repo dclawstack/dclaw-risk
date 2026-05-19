@@ -13,10 +13,10 @@ image:
 service:
   backend:
     type: ClusterIP
-    port: 8000
+    port: 18162
   frontend:
     type: ClusterIP
-    port: 3000
+    port: 3092
 
 ingress:
   enabled: false

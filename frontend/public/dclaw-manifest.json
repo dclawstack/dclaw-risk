@@ -1,0 +1,29 @@
+{
+  "app_id": "risk",
+  "name": "DClaw Risk",
+  "category": "Governance",
+  "tagline": "Enterprise risk management with AI insights",
+  "color": "#10B981",
+  "icon": "shield-alert",
+  "version": "1.0.0",
+  "phase": "P0",
+  "ports": {
+    "frontend": 3092,
+    "backend": 18162
+  },
+  "endpoints": {
+    "health": "/health/",
+    "api": "/api/v1"
+  },
+  "features": [
+    "AI Risk Copilot",
+    "Risk Register",
+    "Risk Assessment (Qualitative + Quantitative/Monte Carlo)",
+    "Control Mapping"
+  ],
+  "ai": {
+    "copilot": true,
+    "providers": ["ollama", "openrouter"],
+    "rag": false
+  }
+}
