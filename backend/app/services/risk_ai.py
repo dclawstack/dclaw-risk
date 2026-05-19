@@ -30,6 +30,7 @@ from app.schemas.ai import (
     SuggestedAction,
 )
 from app.services.llm import LLMProvider, Message, get_llm
+from app.services.retriever import TfidfRetriever
 
 log = structlog.get_logger(__name__)
 
@@ -90,6 +91,22 @@ async def chat(
         Message(role="system", content=SYSTEM_PROMPT),
         Message(role="system", content=context),
     ]
+
+    # RAG: pull relevant passages from the knowledge base using TF-IDF.
+    last_user = next(
+        (m.content for m in reversed(messages) if m.role == "user"), ""
+    )
+    if last_user:
+        try:
+            hits = await TfidfRetriever(db).search(last_user, k=3)
+            if hits:
+                rag = "Relevant knowledge-base passages:\n" + "\n".join(
+                    f"- ({h.title}) {h.snippet}" for h in hits
+                )
+                convo.append(Message(role="system", content=rag))
+        except Exception as e:  # pragma: no cover - defensive
+            log.warning("ai.rag.failed", error=str(e))
+
     convo.extend(Message(role=m.role, content=m.content) for m in messages)  # type: ignore[arg-type]
 
     reply = await llm.chat(convo)
