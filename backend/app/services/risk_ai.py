@@ -168,6 +168,100 @@ def _fallback_identify(context: str, count: int) -> list[IdentifiedRisk]:
     ]
 
 
+async def score_vendor(
+    name: str,
+    notes: str | None,
+    category: str | None,
+    criticality: int,
+    provider: LLMProvider | None = None,
+):
+    """Suggest a 0-100 risk score for a third-party vendor with rationale."""
+    from app.schemas.vendor import ScoreVendorResponse
+
+    llm = provider or get_llm()
+    prompt = (
+        "Score the following third-party vendor on a 0-100 risk scale "
+        "(0 = trivial / well-controlled, 100 = critical exposure). "
+        "Reply with a single JSON object: "
+        "{score: int 0-100, rationale: 1-2 sentences}. JSON only.\n\n"
+        f"VENDOR: {name}\nCATEGORY: {category or '(unspecified)'}\n"
+        f"CRITICALITY: {criticality}/5\nNOTES: {notes or '(none)'}"
+    )
+    raw = await llm.chat(
+        [
+            Message(role="system", content=SYSTEM_PROMPT),
+            Message(role="user", content=prompt),
+        ]
+    )
+    parsed = _extract_json(raw)
+    if isinstance(parsed, dict):
+        try:
+            score = int(parsed.get("score", 50))
+            score = max(0, min(100, score))
+            return ScoreVendorResponse(
+                score=score,
+                rationale=str(parsed.get("rationale", ""))[:1000],
+                provider=llm.name,
+            )
+        except Exception as e:  # pragma: no cover - defensive
+            log.warning("ai.score_vendor.bad_response", error=str(e))
+
+    return ScoreVendorResponse(
+        score=20 + criticality * 12,
+        rationale=f"Heuristic fallback based on criticality {criticality}/5.",
+        provider=llm.name,
+    )
+
+
+async def generate_scenario(
+    context: str, provider: LLMProvider | None = None
+):
+    """Use the LLM to produce a stress-test scenario from a free-text context."""
+    from app.schemas.scenario import CategoryMultiplier, GenerateScenarioResponse
+
+    llm = provider or get_llm()
+    prompt = (
+        "Generate a what-if risk scenario for an enterprise risk manager. "
+        "Reply with a single JSON object with keys: name (string), "
+        "description (1-2 sentences), multipliers (object mapping category "
+        f"name to {{severity: float, probability: float}}). Use categories "
+        f"from {list(CATEGORIES)}. Multipliers should be between 0.5 and 2.0. "
+        "JSON only.\n\nCONTEXT:\n" + context
+    )
+    raw = await llm.chat(
+        [
+            Message(role="system", content=SYSTEM_PROMPT),
+            Message(role="user", content=prompt),
+        ]
+    )
+    parsed = _extract_json(raw)
+    if isinstance(parsed, dict) and isinstance(parsed.get("multipliers"), dict):
+        try:
+            mults = {
+                cat: CategoryMultiplier(**vals)
+                for cat, vals in parsed["multipliers"].items()
+                if isinstance(vals, dict)
+            }
+            return GenerateScenarioResponse(
+                name=str(parsed.get("name", "Generated Scenario"))[:255],
+                description=str(parsed.get("description", "")),
+                multipliers=mults,
+                provider=llm.name,
+            )
+        except Exception as e:  # pragma: no cover - defensive
+            log.warning("ai.generate_scenario.bad_response", error=str(e))
+
+    return GenerateScenarioResponse(
+        name="Recession scenario",
+        description="Deterministic fallback when the LLM response can't be parsed.",
+        multipliers={
+            "Financial": CategoryMultiplier(severity=1.4, probability=1.3),
+            "Operational": CategoryMultiplier(severity=1.2, probability=1.1),
+        },
+        provider=llm.name,
+    )
+
+
 async def classify_risk(
     name: str, description: str | None, provider: LLMProvider | None = None
 ) -> ClassifyRiskResponse:

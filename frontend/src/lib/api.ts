@@ -265,4 +265,296 @@ export const api = {
         body: JSON.stringify({ name, description }),
       }),
   },
+
+  reports: {
+    summary: () =>
+      fetchJson<{
+        total_risks: number;
+        by_category: Record<string, number>;
+        by_status: Record<string, number>;
+        top_risks: Array<{
+          id: string;
+          name: string;
+          category: string;
+          score: number;
+          status: string;
+        }>;
+        mean_score: number;
+        control_coverage_pct: number;
+        total_controls: number;
+      }>("/api/v1/reports/summary"),
+    exposure: () =>
+      fetchJson<{
+        risks_with_quantitative: number;
+        total_p50: number;
+        total_p90: number;
+        total_mean: number;
+        per_risk: Array<{
+          risk_id: string;
+          name: string;
+          category: string;
+          loss_p10: number | null;
+          loss_p50: number | null;
+          loss_p90: number | null;
+          loss_mean: number | null;
+        }>;
+      }>("/api/v1/reports/exposure"),
+    narrative: () =>
+      fetchJson<{ narrative: string; provider: string; facts: string }>(
+        "/api/v1/reports/narrative",
+        { method: "POST" }
+      ),
+  },
+
+  kris: {
+    list: () =>
+      fetchJson<{
+        items: Array<{
+          id: string;
+          name: string;
+          description?: string | null;
+          unit: string;
+          current_value: number;
+          threshold_warn: number;
+          threshold_critical: number;
+          direction: "above" | "below";
+          status: "ok" | "warn" | "critical";
+          risk_id?: string | null;
+          owner?: string | null;
+          created_at: string;
+          updated_at: string;
+        }>;
+        total: number;
+      }>("/api/v1/kris"),
+    create: (payload: {
+      name: string;
+      unit?: string;
+      current_value: number;
+      threshold_warn: number;
+      threshold_critical: number;
+      direction?: "above" | "below";
+      description?: string;
+      risk_id?: string;
+      owner?: string;
+    }) =>
+      fetchJson("/api/v1/kris", {
+        method: "POST",
+        body: JSON.stringify(payload),
+      }),
+    update: (id: string, payload: Record<string, unknown>) =>
+      fetchJson(`/api/v1/kris/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify(payload),
+      }),
+    delete: (id: string) =>
+      fetchJson<void>(`/api/v1/kris/${id}`, { method: "DELETE" }),
+  },
+
+  incidents: {
+    list: () =>
+      fetchJson<{
+        items: Array<{
+          id: string;
+          title: string;
+          description?: string | null;
+          severity: number;
+          occurred_at: string;
+          risk_id?: string | null;
+          status: string;
+        }>;
+        total: number;
+      }>("/api/v1/incidents"),
+    create: (payload: {
+      title: string;
+      description?: string;
+      severity?: number;
+      occurred_at?: string;
+      risk_id?: string;
+      status?: string;
+    }) =>
+      fetchJson("/api/v1/incidents", {
+        method: "POST",
+        body: JSON.stringify(payload),
+      }),
+    delete: (id: string) =>
+      fetchJson<void>(`/api/v1/incidents/${id}`, { method: "DELETE" }),
+    patterns: () =>
+      fetchJson<{
+        patterns: string[];
+        raw?: string;
+        provider: string;
+        count_analysed: number;
+      }>("/api/v1/incidents/patterns"),
+  },
+
+  scenarios: {
+    list: () =>
+      fetchJson<{
+        items: Array<{
+          id: string;
+          name: string;
+          description?: string | null;
+          multipliers: Record<string, { severity: number; probability: number }>;
+          created_at: string;
+        }>;
+        total: number;
+      }>("/api/v1/scenarios"),
+    create: (payload: {
+      name: string;
+      description?: string;
+      multipliers: Record<string, { severity: number; probability: number }>;
+    }) =>
+      fetchJson("/api/v1/scenarios", {
+        method: "POST",
+        body: JSON.stringify(payload),
+      }),
+    delete: (id: string) =>
+      fetchJson<void>(`/api/v1/scenarios/${id}`, { method: "DELETE" }),
+    stressTest: (id: string) =>
+      fetchJson<{
+        scenario_id: string;
+        baseline_total: number;
+        projected_total: number;
+        delta_pct: number;
+        rows: Array<{
+          risk_id: string;
+          name: string;
+          category: string;
+          baseline_score: number;
+          projected_severity: number;
+          projected_probability: number;
+          projected_score: number;
+        }>;
+      }>(`/api/v1/scenarios/${id}/stress-test`, { method: "POST" }),
+    generate: (context: string) =>
+      fetchJson<{
+        name: string;
+        description: string;
+        multipliers: Record<string, { severity: number; probability: number }>;
+        provider: string;
+      }>("/api/v1/scenarios/generate", {
+        method: "POST",
+        body: JSON.stringify({ context }),
+      }),
+  },
+
+  vendors: {
+    list: () =>
+      fetchJson<{
+        items: Array<{
+          id: string;
+          name: string;
+          category?: string | null;
+          criticality: number;
+          score: number;
+          notes?: string | null;
+          last_assessed_at?: string | null;
+          ai_rationale?: string | null;
+        }>;
+        total: number;
+      }>("/api/v1/vendors"),
+    create: (payload: {
+      name: string;
+      category?: string;
+      criticality?: number;
+      score?: number;
+      notes?: string;
+    }) =>
+      fetchJson("/api/v1/vendors", {
+        method: "POST",
+        body: JSON.stringify(payload),
+      }),
+    delete: (id: string) =>
+      fetchJson<void>(`/api/v1/vendors/${id}`, { method: "DELETE" }),
+    aiScore: (id: string) =>
+      fetchJson(`/api/v1/vendors/${id}/ai-score`, { method: "POST" }),
+  },
+
+  emerging: {
+    list: () =>
+      fetchJson<{
+        items: Array<{
+          id: string;
+          title: string;
+          source: string;
+          url: string | null;
+          summary: string | null;
+          detected_at: string;
+          impact_score: number;
+          status: string;
+        }>;
+        total: number;
+        feeds: string[];
+      }>("/api/v1/emerging"),
+    refresh: (feed = "nvd-cve", limit = 10) =>
+      fetchJson<{ feed: string; fetched: number; new: number }>(
+        `/api/v1/emerging/refresh?feed=${feed}&limit=${limit}`,
+        { method: "POST" }
+      ),
+  },
+
+  culture: {
+    listScores: () =>
+      fetchJson<{
+        items: Array<{
+          id: string;
+          period: string;
+          dimension: string;
+          score: number;
+          benchmark: number | null;
+          notes: string | null;
+        }>;
+      }>("/api/v1/culture"),
+    listSurveys: () =>
+      fetchJson<{
+        items: Array<{
+          id: string;
+          name: string;
+          period: string;
+          status: string;
+          questions: Array<{
+            id: string;
+            dimension: string;
+            prompt: string;
+            order_index: number;
+          }>;
+        }>;
+      }>("/api/v1/culture/surveys"),
+    createSurvey: (payload: {
+      name: string;
+      period: string;
+      description?: string;
+      questions: Array<{
+        dimension: string;
+        prompt: string;
+        order_index?: number;
+      }>;
+    }) =>
+      fetchJson("/api/v1/culture/surveys", {
+        method: "POST",
+        body: JSON.stringify(payload),
+      }),
+    openSurvey: (id: string) =>
+      fetchJson(`/api/v1/culture/surveys/${id}/open`, { method: "POST" }),
+    submitSurvey: (
+      id: string,
+      payload: {
+        respondent_hash?: string;
+        answers: Array<{ question_id: string; score: number }>;
+      }
+    ) =>
+      fetchJson(`/api/v1/culture/surveys/${id}/responses`, {
+        method: "POST",
+        body: JSON.stringify(payload),
+      }),
+    closeSurvey: (id: string) =>
+      fetchJson<{
+        id: string;
+        status: string;
+        dimensions_scored: number;
+        responses_total: number;
+      }>(`/api/v1/culture/surveys/${id}/close`, { method: "POST" }),
+    deleteSurvey: (id: string) =>
+      fetchJson<void>(`/api/v1/culture/surveys/${id}`, { method: "DELETE" }),
+  },
 };
