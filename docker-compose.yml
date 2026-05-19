@@ -23,6 +23,11 @@ services:
       DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres:5432/dclaw_risk
       APP_ENV: production
       CORS_ORIGINS: '["http://localhost:3092"]'
+      DEV_AUTH_BYPASS: "true"
+      OLLAMA_URL: http://host.docker.internal:11434
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       - "18162:18162"
     depends_on:
