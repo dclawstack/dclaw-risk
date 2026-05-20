@@ -20,7 +20,7 @@ import {
 import { cn } from "@/lib/utils";
 
 const NAV = [
-  { href: "/", label: "Dashboard", icon: Activity },
+  { href: "/dashboard", label: "Dashboard", icon: Activity },
   { href: "/risks", label: "Risk register", icon: ListChecks },
   { href: "/controls", label: "Controls", icon: ShieldCheck },
   { href: "/reports", label: "Reports", icon: BarChart3 },
@@ -49,7 +49,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <nav className="flex-1 px-3 py-4 space-y-1">
           {NAV.map(({ href, label, icon: Icon }) => {
             const active =
-              href === "/" ? pathname === "/" : pathname.startsWith(href);
+              href === "/dashboard"
+                ? pathname === "/dashboard"
+                : pathname.startsWith(href);
             return (
               <Link
                 key={href}
