@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { AppShell } from "@/components/app-shell";
-import { RiskCopilot } from "@/components/risk-copilot";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "DClaw Risk",
-  description: "Enterprise risk management with AI insights",
+  title: "DClaw Risk — AI-native enterprise risk management",
+  description:
+    "Identify risks, quantify exposure with FAIR Monte Carlo, and ground a domain-aware Copilot in your own knowledge base.",
 };
 
 export default function RootLayout({
@@ -16,10 +15,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <AppShell>{children}</AppShell>
-        <RiskCopilot />
-      </body>
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }
