@@ -20,6 +20,7 @@ import {
   Database,
   Zap,
 } from "lucide-react";
+import { DemoSection } from "@/components/demo-section";
 
 const FEATURES = [
   {
@@ -197,6 +198,7 @@ export default function LandingPage() {
       <NavBar />
       <Hero />
       <StatsBar />
+      <DemoSection />
       <FeatureGrid />
       <CopilotSpotlight />
       <FairSpotlight />
@@ -217,6 +219,9 @@ function NavBar() {
           <span className="text-xs text-slate-400 ml-2">Governance · v1.0</span>
         </div>
         <nav className="flex items-center gap-5 text-sm">
+          <a href="#demo" className="text-slate-600 hover:text-slate-900">
+            Demo
+          </a>
           <a href="#features" className="text-slate-600 hover:text-slate-900">
             Features
           </a>
