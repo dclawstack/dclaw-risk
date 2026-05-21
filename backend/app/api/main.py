@@ -9,6 +9,7 @@ from app.api.v1 import (
     assessments,
     controls,
     culture,
+    demo,
     documents,
     emerging,
     incidents,
@@ -81,3 +82,4 @@ app.include_router(
     emerging.router, prefix="/api/v1/emerging", tags=["emerging-risk"]
 )
 app.include_router(culture.router, prefix="/api/v1/culture", tags=["culture"])
+app.include_router(demo.router, prefix="/api/v1/demo", tags=["demo"])

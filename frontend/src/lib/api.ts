@@ -589,6 +589,37 @@ export const api = {
       }>(`/api/v1/documents/search?q=${encodeURIComponent(q)}&k=${k}`),
   },
 
+  demo: {
+    status: () =>
+      fetchJson<{
+        is_empty: boolean;
+        counts: {
+          risks: number;
+          controls: number;
+          risk_controls: number;
+          assessments: number;
+          incidents: number;
+          kris: number;
+          scenarios: number;
+          vendors: number;
+          emerging: number;
+          culture: number;
+          surveys: number;
+          documents: number;
+        };
+      }>("/api/v1/demo/status"),
+    seed: () =>
+      fetchJson<{ seeded: boolean; counts: Record<string, number> }>(
+        "/api/v1/demo/seed",
+        { method: "POST" }
+      ),
+    clear: () =>
+      fetchJson<{ cleared: boolean; removed: Record<string, number> }>(
+        "/api/v1/demo/clear",
+        { method: "POST" }
+      ),
+  },
+
   compliance: {
     library: () =>
       fetchJson<{
