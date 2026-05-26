@@ -1,0 +1,30 @@
+# Cloud / production overrides. Use with:
+#   helm install dclaw-risk ./helm -n <ns> -f values-prod.yaml
+#
+# Note: COMPLIANCE_MOCK_MODE / DEV_AUTH_BYPASS in secret.data are dev conveniences —
+# override secret.data here (or via --set) to disable them for a real deployment.
+
+backend:
+  image:
+    repository: ghcr.io/dclawstack/dclaw-risk-backend
+    tag: latest
+    pullPolicy: IfNotPresent
+
+frontend:
+  image:
+    repository: ghcr.io/dclawstack/dclaw-risk-frontend
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  host: risk.dclawstack.io
+  tls:
+    - secretName: dclaw-risk-tls
+      hosts:
+        - risk.dclawstack.io
