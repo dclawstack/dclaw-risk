@@ -11,10 +11,10 @@ backend:
     repository: docker.io/library/dclaw-risk-backend
     tag: local
     pullPolicy: Never
-  containerPort: 18162
+  containerPort: 8155
   service:
     type: ClusterIP
-    port: 18162
+    port: 8155
   env: {}
   livenessProbe:
     path: /health/
@@ -39,14 +39,14 @@ frontend:
     repository: docker.io/library/dclaw-risk-frontend
     tag: local
     pullPolicy: Never
-  containerPort: 3092
+  containerPort: 3068
   service:
     type: NodePort
-    port: 3092
+    port: 3068
     nodePort: 30051
   env:
-    PORT: "3092"
-    BACKEND_URL: http://dclaw-risk-backend:18162
+    PORT: "3068"
+    BACKEND_URL: http://dclaw-risk-backend:8155
   readinessProbe:
     path: /
     initialDelaySeconds: 5

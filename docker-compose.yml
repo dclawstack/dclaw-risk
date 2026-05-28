@@ -22,19 +22,19 @@ services:
     environment:
       DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres:5432/dclaw_risk
       APP_ENV: production
-      CORS_ORIGINS: '["http://localhost:3092"]'
+      CORS_ORIGINS: '["http://localhost:3068"]'
       DEV_AUTH_BYPASS: "true"
       OLLAMA_URL: http://host.docker.internal:11434
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:
-      - "18162:18162"
+      - "8155:8155"
     depends_on:
       postgres:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:18162/health/')"]
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8155/health/')"]
       interval: 30s
       timeout: 5s
       retries: 3
@@ -44,15 +44,15 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        NEXT_PUBLIC_API_URL: http://localhost:18162
+        NEXT_PUBLIC_API_URL: http://localhost:8155
     environment:
-      PORT: 3092
+      PORT: 3068
     ports:
-      - "3092:3092"
+      - "3068:3068"
     depends_on:
       - backend
     healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3092/"]
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3068/"]
       interval: 30s
       timeout: 5s
       retries: 3

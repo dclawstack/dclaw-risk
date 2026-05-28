@@ -8,8 +8,8 @@
   "version": "1.0.0",
   "phase": "P0",
   "ports": {
-    "frontend": 3092,
-    "backend": 18162
+    "frontend": 3068,
+    "backend": 8155
   },
   "endpoints": {
     "health": "/health/",

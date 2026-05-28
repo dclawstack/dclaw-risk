@@ -16,7 +16,7 @@ class Settings(BaseSettings):
         "postgresql+asyncpg://postgres:postgres@localhost:5432/dclaw_risk"
     )
 
-    cors_origins: list[str] = ["http://localhost:3092"]
+    cors_origins: list[str] = ["http://localhost:3068"]
 
     # Auth (Logto)
     logto_issuer: str = ""
