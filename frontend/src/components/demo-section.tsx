@@ -117,7 +117,7 @@ export function DemoSection() {
                 </code>{" "}
                 or start the backend with{" "}
                 <code className="rounded bg-amber-100 px-1.5 py-0.5">
-                  uvicorn app.api.main:app --port 18162
+                  uvicorn app.api.main:app --port 8155
                 </code>
                 .
               </div>

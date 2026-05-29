@@ -25,8 +25,8 @@ status: Future
 | **Tagline** | Risk management |
 | **Color** | #10B981 |
 | **Phase** | Future |
-| **Port (Frontend Dev)** | 3092 (TBD — assign before build) |
-| **Port (Backend Dev)** | 18162 (TBD — assign before build) |
+| **Port (Frontend Dev)** | 3068 |
+| **Port (Backend Dev)** | 8155 |
 | **Maturity Tier** | 🟡 Tier 2 — Partial |
 
 ---

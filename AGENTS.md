@@ -7,8 +7,8 @@
 
 **DClaw Risk** is a vertical SaaS application built on the DClaw Stack.
 
-- **Backend Port:** `18162` (FastAPI)
-- **Frontend Port:** `3092` (Next.js)
+- **Backend Port:** `8155` (FastAPI)
+- **Frontend Port:** `3068` (Next.js)
 - **Database:** `dclaw_risk` (PostgreSQL)
 - **Base API Path:** `/api/v1`
 
@@ -35,7 +35,7 @@ These are non-negotiable. If an agent suggests changing them, reject it.
 
 ### Docker
 - **Backend:** `python:3.11-slim`, non-root `appuser`, healthcheck with `python urllib.request.urlopen()`
-- **Frontend:** `node:20-alpine`, port `3092`
+- **Frontend:** `node:20-alpine`, port `3068`
 - **Compose:** container port MUST match `EXPOSE`/`ENV PORT`
 
 ## Directory Structure

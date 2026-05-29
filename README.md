@@ -21,8 +21,8 @@ cp .env.example .env
 # Bring up Postgres + backend + frontend
 docker compose up --build
 
-# → frontend: http://localhost:3092
-# → backend:  http://localhost:18162/docs
+# → frontend: http://localhost:3068
+# → backend:  http://localhost:8155/docs
 ```
 
 For local dev without Docker:
@@ -32,7 +32,7 @@ For local dev without Docker:
 cd backend
 python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
 .venv/bin/alembic upgrade head
-.venv/bin/uvicorn app.api.main:app --reload --port 18162
+.venv/bin/uvicorn app.api.main:app --reload --port 8155
 
 # Frontend (separate terminal)
 cd frontend
@@ -65,7 +65,7 @@ All settings come from environment variables (see `.env.example`):
 | Variable | Default | Notes |
 |----------|---------|-------|
 | `DATABASE_URL` | `postgresql+asyncpg://postgres:postgres@localhost:5432/dclaw_risk` | |
-| `CORS_ORIGINS` | `["http://localhost:3092"]` | JSON array |
+| `CORS_ORIGINS` | `["http://localhost:3068"]` | JSON array |
 | `OLLAMA_URL` | `http://localhost:11434` | Default LLM provider |
 | `OLLAMA_MODEL` | `llama3.1` | |
 | `OPENROUTER_API_KEY` | _(unset)_ | If set, used as fallback |

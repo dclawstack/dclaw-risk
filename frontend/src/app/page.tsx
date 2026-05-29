@@ -598,7 +598,7 @@ function Footer() {
           <ShieldAlert className="w-4 h-4" style={{ color: "#10B981" }} />
           <span>DClaw Risk</span>
           <span className="text-slate-300">·</span>
-          <span>Governance category · port 3092 / 18162</span>
+          <span>Governance category · port 3068 / 8155</span>
         </div>
         <div className="flex items-center gap-4">
           <a
