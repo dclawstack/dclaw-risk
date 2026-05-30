@@ -116,16 +116,19 @@ class FallbackProvider:
         if not providers:
             raise ValueError("at least one provider required")
         self.providers = providers
+        self._last_used: str = providers[0].name
 
     @property
     def name(self) -> str:
-        return "+".join(p.name for p in self.providers)
+        return self._last_used
 
     async def chat(self, messages: list[Message]) -> str:
         last_err: Exception | None = None
         for provider in self.providers:
             try:
-                return await provider.chat(messages)
+                result = await provider.chat(messages)
+                self._last_used = provider.name
+                return result
             except Exception as e:
                 log.warning(
                     "llm.provider_failed", provider=provider.name, error=str(e)
