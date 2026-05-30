@@ -8,3 +8,6 @@
 # Environment
 .env
 .env.local
+
+# Local docker overrides
+docker-compose.override.yml
