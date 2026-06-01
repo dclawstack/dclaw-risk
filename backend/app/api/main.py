@@ -2,6 +2,9 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
 
 from app.api.routes import health
 from app.api.v1 import (
@@ -23,6 +26,22 @@ from app.api.v1 import (
 from app.api.v1.controls import mapping_router as risk_controls_router
 from app.core.config import settings
 from app.core.database import init_db
+from app.core.rate_limit import limiter
+
+
+def _is_production(app_env: str) -> bool:
+    return app_env.lower() in {"prod", "production"}
+
+
+def assert_safe_config(s=settings) -> None:
+    if _is_production(s.app_env) and s.dev_auth_bypass:
+        raise RuntimeError(
+            "DEV_AUTH_BYPASS=true is not permitted when APP_ENV=production. "
+            "Set DEV_AUTH_BYPASS=false and configure LOGTO_JWKS_URI."
+        )
+
+
+assert_safe_config()
 
 
 @asynccontextmanager
@@ -36,6 +55,10 @@ app = FastAPI(
     version="1.0.0",
     lifespan=lifespan,
 )
+
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+app.add_middleware(SlowAPIMiddleware)
 
 app.add_middleware(
     CORSMiddleware,
