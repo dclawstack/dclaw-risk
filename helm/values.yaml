@@ -63,7 +63,9 @@ secret:
   name: ""
   data:
     DATABASE_URL: postgresql+asyncpg://postgres:postgres@dclaw-shared-postgres:5432/dclaw_risk
-    APP_ENV: production
+    # Default chart values are demo-grade (DEV_AUTH_BYPASS=true). Real production deployments
+    # must set APP_ENV=production and DEV_AUTH_BYPASS=false via values-prod.yaml or --set.
+    APP_ENV: demo
     COMPLIANCE_MOCK_MODE: "true"
     DEV_AUTH_BYPASS: "true"
 

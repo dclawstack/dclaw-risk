@@ -18,6 +18,12 @@ frontend:
   service:
     type: ClusterIP
 
+secret:
+  data:
+    APP_ENV: production
+    DEV_AUTH_BYPASS: "false"
+    COMPLIANCE_MOCK_MODE: "false"
+
 ingress:
   enabled: true
   className: nginx

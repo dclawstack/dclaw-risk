@@ -36,6 +36,10 @@ class Settings(BaseSettings):
     openrouter_base_url: str = "https://openrouter.ai/api/v1"
     llm_request_timeout_s: float = 60.0
 
+    # Rate limiting (per-IP, slowapi syntax)
+    rate_limit_default: str = "600/minute"
+    rate_limit_ai: str = "60/minute"
+
 
 @lru_cache
 def get_settings() -> Settings:

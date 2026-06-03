@@ -21,7 +21,7 @@ services:
       dockerfile: Dockerfile
     environment:
       DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres:5432/dclaw_risk
-      APP_ENV: production
+      APP_ENV: development
       CORS_ORIGINS: '["http://localhost:3068"]'
       DEV_AUTH_BYPASS: "true"
       OLLAMA_URL: http://host.docker.internal:11434
